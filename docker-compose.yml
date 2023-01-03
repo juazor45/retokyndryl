@@ -1,0 +1,21 @@
+version: "3"
+services:
+  reto_kyndryl:
+    image: juazor46/reto_kyndryl:main
+    ports:
+      - "8080:8080"
+    networks:
+      - kyndryl-mysql
+    depends_on:
+      - mysqldb
+ 
+  mysqldb:
+    image: mysql:8
+    networks:
+      - kyndryl-mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=bootdb  
+
+networks:
+  kyndryl-mysql:
