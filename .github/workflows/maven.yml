@@ -54,7 +54,8 @@ jobs:
       with:
         context: ./ 
         push: false 
-        tags: 'fixedbuffer/hello'
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
         
     - name: Login to DockerHub
       if: github.ref == 'refs/heads/master'
