@@ -13,7 +13,8 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-
+env:
+  IMAGE_NAME: fixedbuffer/hello
 jobs:
   build:
 
@@ -47,18 +48,32 @@ jobs:
         fail-on-error: true
         
     - name: Checkout
-      uses: actions/checkout@v2    
+      uses: actions/checkout@v2
       
-    - name: Build and push Docker image
-      uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+    - name: Docker meta
+      id: meta
+      uses: docker/metadata-action@v3
       with:
-        context: ./ 
-        push: true
-        tags: ${{ secrets.DOCKER_HUB_USER_NAME }}/myapp:${{ steps.vars.outputs.tag }} , ${{ secrets.DOCKER_HUB_USER_NAME }}/myapp:latest
-                
+        images: |
+          ${{ env.IMAGE_NAME}}
+          ghcr.io/${{ env.IMAGE_NAME}}
+        tags: |
+          latest
+          type=sha
+          
     - name: Login to DockerHub
       if: github.ref == 'refs/heads/master'
       uses: docker/login-action@v1 
       with:
          username: ${{ secrets.DOCKER_HUB_USER_NAME }}
-         password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+         password: ${{ secrets.DOCKER_HUB_PASSWORD }}  
+         
+    - name: Build and push Docker image
+      uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+      with:
+        context: .
+        push: github.ref == 'refs/heads/master' # Solo master
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+                
+   
