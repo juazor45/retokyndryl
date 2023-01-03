@@ -46,6 +46,9 @@ jobs:
         reporter: java-junit
         fail-on-error: true
         
+    - name: Checkout
+      uses: actions/checkout@v3    
+      
     - name: Docker Login
       uses: ./
       with:
