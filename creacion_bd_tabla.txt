@@ -1,0 +1,3 @@
+create database retojuazor;
+use retojuazor;
+create table reto(id int not null auto_increment, sumando01 integer not null, sumando02 integer not null, resultado integer, primary key(id));
