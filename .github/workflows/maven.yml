@@ -52,8 +52,8 @@ jobs:
     - name: Build and push Docker image
       uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
       with:
-        context: .  //Contexto para el comando Docker
-        push: false //Indicamos si queremos hacer push de la imagen
+        context: ./ 
+        push: false 
         tags: 'fixedbuffer/hello'
         
     - name: Login to DockerHub
